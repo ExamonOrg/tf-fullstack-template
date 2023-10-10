@@ -12,6 +12,7 @@
     "aws-xray-sdk": "^3.5.2"
   },
   "dependencies": {
+    "eslint": "^8.51.0",
     "hello": "^0.3.2"
   }
 }

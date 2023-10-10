@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 cd lambdas
 terraform init
 terraform plan -out=plan.out

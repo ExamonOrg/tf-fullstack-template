@@ -1,9 +1,8 @@
-resource "aws_api_gateway_rest_api" "my_rest_api" {
-  provider          = aws.eu_west_1
-  name              = "my-rest-api2"
+resource "aws_api_gateway_rest_api" "default" {
+  name              = var.api_name
   api_key_source    = "HEADER"
-  put_rest_api_mode = "merge"
-  body              = file("${path.module}/../../api_specification/openapi.json")
+  put_rest_api_mode = var.put_rest_api_mode
+  body              = file("${path.module}/${var.open_api_json_relative_path}")
   tags              = {}
 
   endpoint_configuration {
@@ -11,32 +10,12 @@ resource "aws_api_gateway_rest_api" "my_rest_api" {
   }
 }
 
-resource "aws_lambda_permission" "apigw_lambda_permission" {
-  provider      = aws.eu_west_1
-  statement_id  = "AllowExecutionFromRestAPI"
-  action        = "lambda:InvokeFunction"
-  function_name = data.aws_lambda_function.examon_get_questions.arn
-  principal     = "apigateway.amazonaws.com"
-
-  source_arn = "${aws_api_gateway_rest_api.my_rest_api.execution_arn}/*/*"
-}
-
-resource "aws_lambda_permission" "apigw_lambda_permission_hello" {
-  provider      = aws.eu_west_1
-  statement_id  = "AllowExecutionFromRestAPI_${data.aws_lambda_function.hello.function_name}"
-  action        = "lambda:InvokeFunction"
-  function_name = data.aws_lambda_function.hello.arn
-  principal     = "apigateway.amazonaws.com"
-
-  source_arn = "${aws_api_gateway_rest_api.my_rest_api.execution_arn}/*/*"
-}
 
 resource "aws_api_gateway_deployment" "my_rest_api" {
-  provider    = aws.eu_west_1
-  rest_api_id = aws_api_gateway_rest_api.my_rest_api.id
+  rest_api_id = aws_api_gateway_rest_api.default.id
 
   triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.my_rest_api.body))
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.default.body))
   }
 
   lifecycle {
@@ -45,20 +24,18 @@ resource "aws_api_gateway_deployment" "my_rest_api" {
 }
 
 resource "aws_api_gateway_stage" "example" {
-  provider      = aws.eu_west_1
   deployment_id = aws_api_gateway_deployment.my_rest_api.id
-  rest_api_id   = aws_api_gateway_rest_api.my_rest_api.id
-  stage_name    = "v1"
+  rest_api_id   = aws_api_gateway_rest_api.default.id
+  stage_name    = var.stage_name
 }
 
 resource "aws_api_gateway_usage_plan" "example" {
-  provider     = aws.eu_west_1
   name         = "my-usage-plan"
   description  = "my description"
   product_code = "MYCODE"
 
   api_stages {
-    api_id = aws_api_gateway_rest_api.my_rest_api.id
+    api_id = aws_api_gateway_rest_api.default.id
     stage  = aws_api_gateway_stage.example.stage_name
   }
 
@@ -74,14 +51,12 @@ resource "aws_api_gateway_usage_plan" "example" {
   }
 }
 
-resource "aws_api_gateway_api_key" "mykey" {
-  provider = aws.eu_west_1
-  name     = "my_key"
+resource "aws_api_gateway_api_key" "api_key_1" {
+  name     = "api_key_1"
 }
 
 resource "aws_api_gateway_usage_plan_key" "main" {
-  provider      = aws.eu_west_1
-  key_id        = aws_api_gateway_api_key.mykey.id
+  key_id        = aws_api_gateway_api_key.api_key_1.id
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.example.id
 }
@@ -91,6 +66,6 @@ output "invoke_url" {
 }
 
 output "api_key_value" {
-  value     = aws_api_gateway_api_key.mykey.value
+  value     = aws_api_gateway_api_key.api_key_1.value
   sensitive = true
 }

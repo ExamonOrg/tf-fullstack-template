@@ -13,11 +13,6 @@
     "/hello": {
       "get": {
         "operationId": "getHello",
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -28,21 +23,12 @@
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:478119378221:function:hello/invocations",
           "passthroughBehavior": "never"
-        },
-        "x-amazon-apigateway-auth": {
-          "type": "none"
-        },
-        "x-amazon-apigateway-api-key-source": "HEADER"
+        }
       }
     },
     "/questions": {
       "get": {
         "operationId": "getQuestions",
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -53,22 +39,12 @@
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:478119378221:function:examon_get_questions/invocations",
           "passthroughBehavior": "never"
-        },
-        "x-amazon-apigateway-auth": {
-          "type": "none"
-        },
-        "x-amazon-apigateway-api-key-source": "HEADER"
+        }
       }
     }
   },
   "components": {
     "schemas": {},
-    "securitySchemes": {
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "name": "x-api-key",
-        "in": "header"
-      }
-    }
+    "securitySchemes": {}
   }
 }

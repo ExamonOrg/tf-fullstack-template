@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 cd get_questions
 make --file=../lambda_python.mk package_name=get_questions.zip clean
 
