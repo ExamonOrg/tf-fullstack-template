@@ -1,12 +1,12 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Examon API",
-    "version": "1.0.0"
+    "title": "My API",
+    "version": "${version}"
   },
   "servers": [
     {
-      "url": "http://api.examon.org/"
+      "url": "${fqdn}"
     }
   ],
   "paths": {
@@ -38,6 +38,22 @@
           "type": "aws_proxy",
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:478119378221:function:examon_get_questions/invocations",
+          "passthroughBehavior": "never"
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "operationId": "getTags",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:478119378221:function:examon_get_tags/invocations",
           "passthroughBehavior": "never"
         }
       }

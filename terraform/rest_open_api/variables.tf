@@ -15,7 +15,7 @@ variable "aws_region" {
 }
 
 variable "stage_name" {
-  default = "vi"
+  default = "v1"
 }
 
 variable "terraform_state_bucket" {

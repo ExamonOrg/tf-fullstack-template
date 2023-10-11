@@ -15,5 +15,5 @@ variable "stage_name" {
 }
 
 variable "api_name" {
-  default = "my-rest-api2"
+  default = "rest-api"
 }
