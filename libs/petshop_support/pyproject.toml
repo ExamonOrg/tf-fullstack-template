@@ -1,14 +1,13 @@
 [tool.poetry]
-name = "examon-mongo"
+name = "petshop_support"
 version = "0.1.0"
 description = ""
 authors = ["Jarrod Folino <jarrod.folino@fundingcircle.com>"]
 readme = "README.md"
-packages = [{ include = "examon_mongo" }]
+packages = [{ include = "petshop_support" }]
 
 [tool.poetry.dependencies]
 python = ">3.10.11,<3.12"
-graphene-mongo = "^0.2.15"
 
 [build-system]
 requires = ["poetry-core"]
