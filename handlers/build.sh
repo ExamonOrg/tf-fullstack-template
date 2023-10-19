@@ -1,8 +1,14 @@
-cd get_questions
-make --file=../lambda_python.mk package_name=get_questions.zip build
+cd pet/create
+make --file=../../lambda_python.mk package_name=pet_create.zip build
 
-cd ../get_tags
-make --file=../lambda_python.mk package_name=get_tags.zip build
+cd ../delete
+make --file=../../lambda_python.mk package_name=pet_delete.zip build
 
-cd ../hello
-make --file=../lambda_node.mk package_name=hello.zip build
+cd ../get
+make --file=../../lambda_python.mk package_name=pet_get.zip build
+
+cd ../index
+make --file=../../lambda_python.mk package_name=pet_index.zip build
+
+cd ../update
+make --file=../../lambda_python.mk package_name=pet_update.zip build

@@ -1,11 +1,17 @@
 #!/bin/bash
 set -e
 
-cd get_questions
-make --file=../lambda_python.mk package_name=get_questions.zip clean
+cd pet/create
+make --file=../../lambda_python.mk package_name=pet_create.zip clean
 
-cd ../get_tags
-make --file=../lambda_python.mk package_name=get_tags.zip clean
+cd ../delete
+make --file=../../lambda_python.mk package_name=pet_delete.zip clean
 
-cd ../hello
-make --file=../lambda_node.mk package_name=hello.zip clean
+cd ../get
+make --file=../../lambda_python.mk package_name=pet_get.zip clean
+
+cd ../index
+make --file=../../lambda_python.mk package_name=pet_index.zip clean
+
+cd ../update
+make --file=../../lambda_python.mk package_name=pet_update.zip clean
