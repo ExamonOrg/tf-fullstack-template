@@ -1,8 +1,13 @@
 package_dir := package
+s3_bucket := examon-lambdas
+lambda_prefix := petshop
 
 export PYTHONPATH := .
 
 build: clean package zip
+.PHONY: build
+
+deploy: build upload_fn
 .PHONY: build
 
 test:
@@ -19,8 +24,16 @@ package:
     cp -R src ${package_dir}
 .PHONY: package
 
+upload_fn:
+	aws s3 cp ${name}.zip s3://${s3_bucket} && \
+	aws lambda update-function-code --function-name ${lambda_prefix}_${name} --s3-bucket ${s3_bucket} --s3-key ${name}.zip > /dev/null
+.PHONY: deploy
+
 zip:
-	zip -r --exclude requirements.\* --recurse-paths ${package_name} package/*
+	cd package && \
+	zip -r -D --exclude requirements.\* --recurse-paths ${name}.zip * && \
+	cd .. && \
+	mv package/${name}.zip .
 .PHONY: zip
 
 clean:

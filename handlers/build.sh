@@ -12,3 +12,6 @@ make --file=../../lambda_python.mk package_name=pet_index.zip build
 
 cd ../update
 make --file=../../lambda_python.mk package_name=pet_update.zip build
+
+cd ../listener
+make --file=../../lambda_python.mk package_name=pet_listener.zip build

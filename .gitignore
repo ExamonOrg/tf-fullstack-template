@@ -6,6 +6,11 @@ handlers/*/node_modules/*
 handlers/get_questions/get_questions.zip
 handlers/get_tags/get_tags.zip
 
+**/plan.out
+
+handlers/**/dist/*
+libs/**/dist/*
+
 terraform/lambdas/plan.out
 terraform/lambdas/zip_files/*.zip
 terraform/rest_open_api/plan.out

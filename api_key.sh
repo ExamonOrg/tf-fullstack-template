@@ -5,3 +5,4 @@ INVOKE_URL=$(terraform output -raw invoke_url)
 
 echo "curl -H \"x-api-key: ${API_KEY}\" ${INVOKE_URL}v1/pets"
 echo "curl -H \"x-api-key: ${API_KEY}\" ${INVOKE_URL}v1/pet"
+echo "curl -X POST -d '{\"name\":\"Fido\", \"breed\":\"doberman\"}' -H \"x-api-key: ${API_KEY}\" ${INVOKE_URL}v1/pet"
