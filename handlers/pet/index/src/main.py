@@ -1,6 +1,8 @@
 import json
 import re
 
+import boto3
+
 from aws_lambda_powertools import Metrics
 from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
@@ -13,6 +15,7 @@ logger = Logger()
 metrics = Metrics(namespace="examon.get_questions")
 tracer = Tracer()
 
+region = 'eu-west-1'
 
 @logger.inject_lambda_context(
     correlation_id_path="headers.my_request_id_header",
@@ -22,19 +25,14 @@ tracer = Tracer()
 @metrics.log_metrics(capture_cold_start_metric=True)
 def lambda_handler(event: dict, context: LambdaContext):
     try:
+        dynamodb = boto3.resource('dynamodb', region_name=region)
+        table = dynamodb.Table('pets')
+        response = table.scan(AttributesToGet=[ 'pet_uuid', 'name', 'breed'])
+        logger.info(f"Getting all pets, found {len(response['Items'])}")
         return {
             "statusCode": 200,
             "headers": {"content-type": "application/json"},
-            "body": json.dumps([
-                {
-                    "name": "Fido",
-                    "breed": "Doberman",
-                },
-                {
-                    "name": "Bingo",
-                    "breed": "Cat",
-                },
-            ]),
+            "body": json.dumps(response['Items']),
         }
     except Exception as e:
         Logger.error(e)

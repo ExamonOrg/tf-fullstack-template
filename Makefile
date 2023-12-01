@@ -1,6 +1,28 @@
 s3_bucket := examon-lambdas
 project := petshop
 package_dir := package
+default: help ;
+
+#########################################
+# Help
+#########################################
+help:
+	@echo "Usage: make <target>"
+	@echo ""
+	@echo "Targets:"
+	@echo "  infra_create"
+	@echo "  infra_destroy"
+	@echo "  fn_build resource=<resource> name=<name>"
+	@echo "  fn_upload resource=<resource> name=<name>"
+	@echo "  fn_zip resource=<resource> name=<name>"
+	@echo "  fn_test resource=<resource> name=<name>"
+	@echo "  fn_clean resource=<resource> name=<name>"
+	@echo "  fn_deploy"
+	@echo "  fn_deploy_all"
+	@echo ""
+	@echo "Resources:"
+	@echo "  pet (create, create, get, index, listener, update)"
+.PHONY: help
 
 #########################################
 # Terraform
@@ -20,14 +42,6 @@ infra_destroy:
 #########################################
 # Lambdas
 #########################################
-rest_endpoints:
-	cd terraform/site && \
-	API_KEY=$(terraform output -raw api_key_value) && \
-	INVOKE_URL=$(terraform output -raw invoke_url) && \
-	echo "curl -H \"x-api-key: ${API_KEY}\" ${INVOKE_URL}v1/pets" && \
-	echo "curl -H \"x-api-key: ${API_KEY}\" ${INVOKE_URL}v1/pet" && \
-	echo "curl -X POST -d '{\"name\":\"Fido\", \"breed\":\"doberman\"}' -H \"x-api-key: ${API_KEY}\" ${INVOKE_URL}v1/pet"
-.PHONY: rest_endpoints
 
 fn_build:
 	cd "handlers/${resource}/${name}" && \
@@ -71,6 +85,10 @@ fn_clean:
 
 fn_deploy: fn_build fn_zip fn_upload
 .PHONY: fn_all
+
+#########################################
+# Aggregate
+#########################################
 
 fn_deploy_all:
 	$(MAKE) fn_deploy resource=pet name=create

@@ -1,5 +1,4 @@
 Petshop Template
-- cookiecutter for python
 - Export commands to invoke for CRUD
 - Use App Config for env vars
 - from aws_lambda_powertools.event_handler import APIGatewayRestResolver
